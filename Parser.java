@@ -10,38 +10,38 @@
 /**
  * This class is thread safe.
  */
+@Data
 public class Parser {
-  private File file;
-  public synchronized void setFile(File f) {
-    file = f;
-  }
-  public synchronized File getFile() {
-    return file;
-  }
+  private final File file;
+ 
   public String getContent() throws IOException {
     InputStream i = new FileInputStream(file);
-    String output = "";
+    StringBuilder strBuilder = new StringBuilder();
     int data;
     while ((data = i.read()) > 0) {
-      output += (char) data;
+      strBuilder.append((char) data);
     }
-    return output;
+    return strBuilder.toString();
   }
+ 
   public String getContentWithoutUnicode() throws IOException {
     InputStream i = new FileInputStream(file);
-    String output = "";
+    StringBuilder strBuilder = new StringBuilder();
     int data;
     while ((data = i.read()) > 0) {
       if (data < 0x80) {
-        output += (char) data;
+        strBuilder.append((char) data);
       }
     }
     return output;
   }
+ 
   public void saveContent(String content) throws IOException {
     OutputStream o = new FileOutputStream(file);
-    for (int i = 0; i < content.length(); i += 1) {
+    // string to char? next get from array
+    for (int i = 0; i < content.length(); i++) {
       o.write(content.charAt(i));
     }
   }
+ 
 }
